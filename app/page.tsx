@@ -172,9 +172,35 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (!weather) return;
-    fetchWeather(`/api/weather?city=${encodeURIComponent(weather.name)}&unit=${unit}`);
-  }, [unit]);
+  
+  if (weather) return;
+
+  if (!navigator.geolocation) {
+    
+    fetchWeather(`/api/weather?city=Munich&unit=${unit}`, "Munich");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+
+      await fetchWeather(
+        `/api/weather?lat=${latitude}&lon=${longitude}&unit=${unit}`
+      );
+    },
+    async () => {
+      
+      await fetchWeather(`/api/weather?city=Munich&unit=${unit}`, "Munich");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 8000,
+    }
+  );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   return (
     <main className="container">

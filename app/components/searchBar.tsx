@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Unit } from "@/types/weather";
 
 type SearchBarProps = {
@@ -22,18 +22,9 @@ export default function SearchBar({
   recentCities,
   onPickRecent,
 }: SearchBarProps) {
-  const [city, setCity] = useState<string>("Munich");
+  const [city, setCity] = useState<string>("");
 
   const trimmed = useMemo(() => city.trim(), [city]);
-
-  useEffect(() => {
-  if (recentCities.length > 0) {
-    onSearch(recentCities[0]);
-  } else {
-    onSearch("Munich");
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
