@@ -22,13 +22,18 @@ export default function SearchBar({
   recentCities,
   onPickRecent,
 }: SearchBarProps) {
-  const [city, setCity] = useState<string>("");
+  const [city, setCity] = useState<string>("Munich");
 
   const trimmed = useMemo(() => city.trim(), [city]);
 
   useEffect(() => {
-    
-  }, [trimmed]);
+  if (recentCities.length > 0) {
+    onSearch(recentCities[0]);
+  } else {
+    onSearch("Munich");
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
